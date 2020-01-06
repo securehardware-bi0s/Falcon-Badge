@@ -1,0 +1,4 @@
+#define asteroid_0_width 8
+#define asteroid_0_height 8
+static uint8_t asteroid_0_bits[] = {
+  0x18, 0x3C, 0x76, 0xC3, 0x65, 0xFD, 0xDA, 0x3C, };
