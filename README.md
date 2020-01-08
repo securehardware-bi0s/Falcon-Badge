@@ -48,7 +48,7 @@ esptool.py write_flash 0x00000 initial.bin
 ### Source Code
 The code is written with the help of [Arduino](https://github.com/esp8266/Arduino) SDK, considering it to be beginner-friendly platform. You can run [MicroPython](https://docs.micropython.org/en/latest/esp8266/tutorial/intro.html) on the same board as well.
 #### The structure
-The badge has the personal data of the users stored in the SPIFFS system. Hence we use the 4MB filesystem with 1MB for filesystem.
+The badge has the personal data of the users stored in the SPIFFS system. Hence we use the 4MB flash memory in NodeMCU with 1MB specified for filesystem.
 If you're interested in learning more about the [Filesystem](https://arduino-esp8266.readthedocs.io/en/latest/filesystem.html) used in ESP8266 Arduino. 
 This filesystem consists of the following files:
 ```
