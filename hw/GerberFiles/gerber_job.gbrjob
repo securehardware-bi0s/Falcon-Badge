@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2019-11-15T11:47:20Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.4.2"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "InCTF_Badge"
+        },
+        "Owner": "jharikrishnan18 jharikrishnan18 <jharikrishnan18@gmail.com>",
+        "Size": {
+            "X": 126.933809,
+            "Y": 176.154841
+        }
+    }
+}
