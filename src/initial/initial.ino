@@ -40,11 +40,27 @@ int t;
 #include <Wire.h>
 #include "SSD1306Wire.h"
 #include <FS.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPUpdateServer.h>
+#include <ESP8266WebServer.h>
+#include <FalconOTA.h>
 
 SSD1306Wire display(0x3c, 4, 5, GEOMETRY_128_32);
+ESP8266WebServer server(8266);
 
 // Custom Header Files
 #include "images.h"
+
+/////////////////////////////////////////////////////////////////////
+#ifndef STASSID
+#define STASSID "inctf"
+#define STAPSK  "hsr_bi0s"
+#endif
+////////////////////////////////////////////////////////////////////
+const char* ssid = STASSID;
+const char* password = STAPSK;
+const char* upad="admin";
+const char* uppasswd="admin";
 
 String name;
 String cred;
@@ -184,13 +200,27 @@ void setup() {
   display.init();
   display.flipScreenVertically();
   display.setFont(ArialMT_Plain_10);
+  // WiFi Setup
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.println("");
+
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
   // FS Init
   if(!SPIFFS.begin()){
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
-// Calling FS Values
-
+  // Calling FS Values
   File  spiffs_name = SPIFFS.open("/name", "r");
    if (!spiffs_name) {
       Serial.println("file open failed");
@@ -238,34 +268,43 @@ void setup() {
 // Serial.println(upasswd);
 // Serial.println(mqttClientID);
   Serial.println("falcon{g3t_start3d_w!th_h4rdw4r3}");
+// Server Setup
+  server.on("/", []() {
+    server.send(200, "text/plain", "Hi! I am in Initial Mode.");
+  });
+
+  FalconOTA.begin(&server,upad,uppasswd);    // Start OTA
+  server.begin();
+  Serial.println("HTTP server started");
 
 }
 
 
 /////////////////////////////////////////////////////////////////////
 void loop() {
+  server.handleClient();
   display.clear();
   check();
   display.setFont(ArialMT_Plain_10);
   display.clear();
   disp_name();
   display.display();
-  delay(1000);
+  delay(300);
   check();
   display.clear();
   disp_id();
   display.display();
-  delay(1000);
+  delay(300);
   check();
   display.clear();
   inctf_logo();
   display.display();
-  delay(1000);
+  delay(300);
   check();
   display.clear();
   handcraft();
   display.display();
-  delay(1000);
+  delay(300);
  
 }
 /////////////////////////////////////////////////////////////////////
