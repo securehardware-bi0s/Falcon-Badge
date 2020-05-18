@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include "U8g2lib.h"
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <FalconOTA.h>
 // graphics
 #include "ship_0.h"
 #include "ship_1.h"
@@ -18,10 +21,20 @@
 #define ASTEROID_MAX_SPEED 6
 #define ROCKET_SPEED 3
 
+/////////////////////////////////////////////////////////////////////
+#ifndef STASSID
+#define STASSID "inctf"
+#define STAPSK  "hsr_bi0s"
+#endif
+////////////////////////////////////////////////////////////////////
+const char* ssid = STASSID;
+const char* password = STAPSK;
+const char* upad="admin";
+const char* uppasswd="admin";
 // If you want to use a different screen
 // change the constructor here :), and defines above
 U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
-
+ESP8266WebServer server(8266);
 
 enum GAMESTATE {
   START, RUNNING, STOPPED
@@ -149,8 +162,27 @@ void setup() {
   pinMode(16, INPUT);
   u8g2.begin();
   u8g2.setContrast(0);
+  WiFi.begin(ssid, password);
   Serial.println("");
 
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  server.on("/", []() {
+    server.send(200, "text/plain", "Hi! I am currently running Falcon-Fire.");
+  });
+
+  FalconOTA.begin(&server,upad,uppasswd);    // Start OTA
+  server.begin();
+  Serial.println("HTTP server started");
 }
 
 
@@ -158,7 +190,9 @@ void loop() {
   if (gameState == START) {
     u8g2.clearBuffer();
     u8g2.setFont(u8g2_font_profont12_tf);
+    server.handleClient();
     u8g2.drawStr(12, 8, "Falcon Fire");
+    //u8g2.drawStr(4, 20, "by @SH@bi0s");
     u8g2.drawStr(6, 32, "~~ Press Button ~~");
     u8g2.sendBuffer();
 

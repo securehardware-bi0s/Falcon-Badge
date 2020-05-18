@@ -1,5 +1,5 @@
 /**
- * Init-Firmware
+ * Final-Firmware
  * The MIT License (MIT)
  *
  * Copyright (c) 2019 by Securehardware@bi0s
@@ -36,7 +36,13 @@ const int cntrl_2Pin = 16; // Pin D0
 // Libraries Included for modules
 #include <Wire.h>
 #include "SSD1306Wire.h"
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <ESP8266HTTPUpdateServer.h>
+#include <FalconOTA.h>
 #include <FS.h>
+#include <PubSubClient.h>
+#include <WiFiClient.h>
 
 SSD1306Wire display(0x3c, 4, 5, GEOMETRY_128_32);
 ESP8266WebServer server(8266);
@@ -240,6 +246,33 @@ void setup()
   dec_ip[2] = (uint8_t)dec_ip[2];          
   dec_ip[3] = (uint8_t)dec_ip[3];            
  IPAddress ip_static(dec_ip[0],dec_ip[1],dec_ip[2],dec_ip[3]);
+
+// WiFi
+  WiFi.mode(WIFI_STA);
+  WiFi.hostname(id);
+  WiFi.config(ip_static, gateway,subnet);
+  WiFi.begin(ssid);
+  Serial.println("");
+
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  server.on("/", []() {
+    server.send(200, "text/plain", "Congrats you've unlocked the master firmware");
+  });
+
+  FalconOTA.begin(&server,upad,upasswd);    // Start OTA
+  server.begin();
+  Serial.println("OTA server started");
+} 
 
 Demo demos[] = {disp_name,particleDraw,inctf_logo,handcraft};
 int demoLength = (sizeof(demos) / sizeof(Demo));
