@@ -282,29 +282,29 @@ void setup() {
 
 /////////////////////////////////////////////////////////////////////
 void loop() {
-  server.handleClient();
+  server.handleClient(); // Update will only check here
   display.clear();
   check();
   display.setFont(ArialMT_Plain_10);
   display.clear();
   disp_name();
   display.display();
-  delay(300);
+  delay(1000);
   check();
   display.clear();
   disp_id();
   display.display();
-  delay(300);
+  delay(1000);
   check();
   display.clear();
   inctf_logo();
   display.display();
-  delay(300);
+  delay(1000);
   check();
   display.clear();
   handcraft();
   display.display();
-  delay(300);
+  delay(1000);
  
 }
 /////////////////////////////////////////////////////////////////////
