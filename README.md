@@ -1,17 +1,31 @@
 # Falcon-Badge
 
 **Work in progress.**
+**Update: Check the OTA branch**
 
 ## Layout
 ```
 ├── bin
-│   ├── falcon-fire.bin
-│   ├── final-unlocked.bin
-│   ├── game_of_life.bin
-│   ├── intial.bin
-│   └── serial-exploitation.bin
-└── README.md
-
+│   ├── falcon-fire.bin
+│   ├── final-unlocked.bin
+│   ├── game_of_life.bin
+│   ├── initial.bin
+│   └── serial-exploitation.bin
+├── hw
+│   ├── Assembly
+│   ├── DrillFiles
+│   ├── GerberFiles
+│   ├── InCTF_Badge.brd
+│   └── InCTF_Badge.sch
+├── LICENSE
+├── README.md
+└── src
+    ├── falcon-fire
+    ├── Final
+    ├── Game-Of-Life
+    ├── initial
+    │   ├── data
+    └── serial-exploitation
 ```
 ### Software Pre-requisities
 Software to install:
@@ -71,7 +85,9 @@ data/
     * FS
 #### How to compile? 
 * If you have successfully installed Arduino IDE , you can just clone the code to get started.
+
 ![Warning](https://i.ibb.co/0JGRqHv/error.png)
+
 You might face an issue of creating a new folder, just press "OK" and continue.
 * If you like the makefile approach then I suggest you look at [makeEspArduino](https://github.com/plerup/makeEspArduino) project.
     * To build 
@@ -83,6 +99,11 @@ You might face an issue of creating a new folder, just press "OK" and continue.
 ### To-Do
 
 * [x] Add Source Code
-* [ ] Add OTA and MQTT Code
+* [x] Add OTA and MQTT Code (Check the OTA branch)
 * [ ] Add Write-Ups
 
+### Credits
+
+GameOfLife based on: [DrMikeG](https://raw.githubusercontent.com/DrMikeG/Conway/master/GameOfLife/GameOfLife.ino)
+
+Falcon-Fire based on: [pauls-3d-things](https://github.com/pauls-3d-things/arduino-space-hopper)
