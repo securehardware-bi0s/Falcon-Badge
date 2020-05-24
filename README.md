@@ -1,7 +1,7 @@
 # Falcon-Badge
 
 **Work in progress.**
-**Update: Check the OTA branch**
+**Check the OTA branch**
 
 ## Layout
 ```
@@ -96,11 +96,32 @@ You might face an issue of creating a new folder, just press "OK" and continue.
         ```make -f makeEspArduino.mk flash FLASH_DEF=4M1M```
     * For flashing the filesystem 
         ```make -f makeEspArduino.mk flash_fs FLASH_DEF=4M1M```
+        
+### Write-Ups 
+<h3>You sure?</h3><details>
+
+## Web Challenge
+`?id=100` gives the correct flag
+
+## Image Challenge
+There is a base64 text appended to the image. Extracting and decoding it will give a table of 8 columns representing the 8 bits of each character.
+Extract the binary data and decode it to get the flag.
+
+## Serial Exploitation
+The challenge starts with a login screen and on choosing the login option requires you to enter a randomly generated OTP. On analysis we can see that the LDR which is connected to the analog pin of the NodeMCU is used as the random seed for generating pseudo-random values. 
+
+If we short the analog pin with the VCC the random seed value will remain constant and so the pattern of generated OTP will remain constant. So by using a sample code to generate the OTP pattern or by brute-force you can login to the system.
+
+Once you login, you will get an option to read data from the board. You only have permission to read a maximum of 50 characters. But the array from which you are reading data is a byte array of size 260. The input given is to a signed 8 bit variable and the program first checks if the value is greater less than 50. After the initial condition is passed the value is moved to an unsigned 8 bit variable and then that many number of characters from the array is printed. So if we enter a negative number like ‘-1’ it will bypass the initial check and when the value is moved to the unsigned variable -1 becomes 255 and we can read 255 characters from the array. The flag is stored from the 188th index so the output we get by giving -1 as the input will contain the flag!
+
+FLAG : falcon{y0u_3xtr4ct3d_th3_s3ctr3t_d4t4}
+</details>
+
 ### To-Do
 
 * [x] Add Source Code
 * [x] Add OTA and MQTT Code (Check the OTA branch)
-* [ ] Add Write-Ups
+* [x] Add Write-Ups
 
 ### Credits
 
